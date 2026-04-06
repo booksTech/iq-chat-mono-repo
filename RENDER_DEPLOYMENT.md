@@ -23,7 +23,7 @@ If you do not want Blueprint:
 3. Configure:
    - Runtime: `Node`
    - Root Directory: `backend`
-   - Build Command: `npm ci && npm run build`
+   - Build Command: `npm ci --include=dev && npm run build`
    - Start Command: `npm run start`
    - Plan: `Free`
    - Health Check Path: `/api/v1/health`
@@ -34,7 +34,6 @@ Set these in Render service settings:
 
 ```env
 NODE_ENV=production
-PORT=10000
 MONGODB_URI=your_mongodb_uri
 JWT_SECRET=your_32_plus_character_secret
 JWT_EXPIRES_IN=28d
@@ -67,6 +66,7 @@ VITE_AUTH_PAYLOAD_SECRET=your_shared_secret
 Important:
 - `CLIENT_URL` must exactly match your frontend URL (`https`, domain, no typo).
 - `AUTH_PAYLOAD_SECRET` must match frontend `VITE_AUTH_PAYLOAD_SECRET`.
+- Do not set `PORT` manually on Render unless needed. Render injects it automatically.
 
 ## Free Plan Notes
 
@@ -93,3 +93,11 @@ Important:
 
 ### Startup failed on Render
 - Usually a missing required env var (`MONGODB_URI`, `JWT_SECRET`, `CLIENT_URL`, `AUTH_PAYLOAD_SECRET`).
+
+## Where To See Logs In Render
+
+If deploy fails but main logs look empty:
+1. Open the service.
+2. Go to `Events` and open the failed deploy item.
+3. Check `Build Logs` for install/build failures.
+4. Check `Runtime Logs` for startup env/config crashes.
