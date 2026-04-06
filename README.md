@@ -1,16 +1,87 @@
-# React + Vite
+# Quizz Chat
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Folder Structure
 
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```text
+quizz_chat/
+├─ backend/
+│  └─ src/
+│     ├─ app.ts
+│     ├─ server.ts
+│     ├─ config/
+│     │  ├─ db.ts
+│     │  └─ env.ts
+│     ├─ constants/
+│     │  └─ collectionNames.ts
+│     ├─ controllers/
+│     │  ├─ auth.controller.ts
+│     │  ├─ chatRoom.controller.ts
+│     │  ├─ message.controller.ts
+│     │  └─ testSet.controller.ts
+│     ├─ middleware/
+│     │  ├─ auth.ts
+│     │  ├─ decryptAuthPayload.ts
+│     │  ├─ errorHandler.ts
+│     │  └─ validateRequest.ts
+│     ├─ models/
+│     │  ├─ ChatRoom.ts
+│     │  ├─ Message.ts
+│     │  ├─ TestSet.ts
+│     │  └─ User.ts
+│     ├─ routes/
+│     │  ├─ auth.routes.ts
+│     │  ├─ auth.schemas.ts
+│     │  ├─ chatRoom.routes.ts
+│     │  ├─ chatRoom.schemas.ts
+│     │  ├─ message.routes.ts
+│     │  ├─ message.schemas.ts
+│     │  ├─ testSet.routes.ts
+│     │  └─ testSet.schemas.ts
+│     ├─ socket/
+│     │  └─ index.ts
+│     ├─ types/
+│     │  └─ express.d.ts
+│     └─ utils/
+│        ├─ AppError.ts
+│        ├─ asyncHandler.ts
+│        ├─ ensureCollections.ts
+│        ├─ httpStatus.ts
+│        ├─ messageCrypto.ts
+│        ├─ payloadCrypto.ts
+│        ├─ sendEmail.ts
+│        └─ token.ts
+├─ public/
+├─ src/
+│  ├─ .env
+│  ├─ .env.example
+│  ├─ App.tsx
+│  ├─ app.css
+│  ├─ index.css
+│  ├─ main.tsx
+│  ├─ vite-env.d.ts
+│  ├─ assets/
+│  │  ├─ hero.png
+│  │  ├─ react.svg
+│  │  └─ vite.svg
+│  ├─ components/
+│  │  ├─ AuthScreen.tsx
+│  │  ├─ CreateRoomScreen.tsx
+│  │  ├─ LockScreen.tsx
+│  │  ├─ PortalChatScreen.tsx
+│  │  ├─ QuizScreen.tsx
+│  │  └─ ResultScreen.tsx
+│  ├─ constants/
+│  │  └─ quizData.ts
+│  ├─ services/
+│  │  ├─ authApi.ts
+│  │  ├─ chatRoomApi.ts
+│  │  ├─ messageApi.ts
+│  │  └─ socketClient.ts
+│  └─ types/
+│     └─ quiz.ts
+├─ index.html
+├─ package.json
+├─ tsconfig.json
+├─ vite.config.js
+└─ NETLIFY_DEPLOYMENT.md
+```

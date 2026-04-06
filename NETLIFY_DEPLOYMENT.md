@@ -4,6 +4,8 @@ This project has:
 - Frontend: Vite + React (deploy on Netlify)
 - Backend: Express + MongoDB + Socket.IO (deploy on a separate server like Render/Railway/Fly/EC2)
 
+For a step-by-step Render free deployment setup, use `RENDER_DEPLOYMENT.md`.
+
 You **cannot** host this backend as-is directly inside Netlify static hosting.
 
 ## 1) Deploy Backend First
@@ -96,4 +98,3 @@ After deploy:
 
 ### Auth payload errors
 - `VITE_AUTH_PAYLOAD_SECRET` and backend `AUTH_PAYLOAD_SECRET` must be identical.
-
