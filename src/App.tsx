@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ChangeEvent, type JSX } from 'react';
+import { useCallback, useEffect, useRef, useState, type ChangeEvent, type JSX } from 'react';
 import { AuthScreen } from './components/AuthScreen';
 import { CreateRoomScreen } from './components/CreateRoomScreen';
 import { LockScreen } from './components/LockScreen';
@@ -104,6 +104,27 @@ export default function QuizApp(): JSX.Element {
     });
   };
 
+  const clearActiveChatSession = useCallback((): void => {
+    if (typingTimeoutRef.current) {
+      window.clearTimeout(typingTimeoutRef.current);
+    }
+    setCodeInput('');
+    setCodeError(false);
+    setCodeErrorMessage('INVALID CODE - ACCESS DENIED');
+    setIsJoiningRoom(false);
+    setShaking(false);
+    setSelectedAttachment(null);
+    setSelectedImage(null);
+    setCurrentRoomCode(null);
+    setCurrentRoomName(null);
+    setCurrentRoomMembers([]);
+    setOnlineMemberEmails([]);
+    setOtherMemberTyping(false);
+    setOnlineCount(0);
+    setSelectionMode(false);
+    setSelectedMessageIds([]);
+  }, []);
+
   useEffect(() => {
     const bootstrapAuth = async (): Promise<void> => {
       const storedToken = getStoredAuthToken();
@@ -157,6 +178,35 @@ export default function QuizApp(): JSX.Element {
   useEffect(() => {
     setIsHeaderMenuOpen(false);
   }, [screen]);
+
+  useEffect(() => {
+    const moveChatToQuizOnHide = (): void => {
+      if (screen !== 'chat') {
+        return;
+      }
+      emitTypingState(false);
+      clearActiveChatSession();
+      setScreen('quiz');
+    };
+
+    const handleVisibilityChange = (): void => {
+      if (document.visibilityState === 'hidden') {
+        moveChatToQuizOnHide();
+      }
+    };
+
+    const handlePageHide = (): void => {
+      moveChatToQuizOnHide();
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    window.addEventListener('pagehide', handlePageHide);
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('pagehide', handlePageHide);
+    };
+  }, [screen, clearActiveChatSession]);
 
   useEffect(() => {
     if (screen !== 'quiz' || quizMessages.length > 0) {
@@ -753,25 +803,14 @@ export default function QuizApp(): JSX.Element {
 
   const goToLockScreen = (): void => {
     emitTypingState(false);
-    if (typingTimeoutRef.current) {
-      window.clearTimeout(typingTimeoutRef.current);
-    }
+    clearActiveChatSession();
     setScreen('lock');
-    setCodeInput('');
-    setCodeError(false);
-    setCodeErrorMessage('INVALID CODE - ACCESS DENIED');
-    setIsJoiningRoom(false);
-    setShaking(false);
-    setSelectedAttachment(null);
-    setSelectedImage(null);
-    setCurrentRoomCode(null);
-    setCurrentRoomName(null);
-    setCurrentRoomMembers([]);
-    setOnlineMemberEmails([]);
-    setOtherMemberTyping(false);
-    setOnlineCount(0);
-    setSelectionMode(false);
-    setSelectedMessageIds([]);
+  };
+
+  const goToQuizFromChat = (): void => {
+    emitTypingState(false);
+    clearActiveChatSession();
+    setScreen('quiz');
   };
 
   const resetQuiz = (): void => {
@@ -910,7 +949,7 @@ export default function QuizApp(): JSX.Element {
           onlineCount={onlineCount}
           roomName={currentRoomName}
           onAttachClick={() => fileInputRef.current?.click()}
-          onBackToLock={goToLockScreen}
+          onBackToLock={goToQuizFromChat}
           onChatInputChange={handleChatInputChange}
           onDownloadAttachment={(messageId) => void downloadMessageAttachment(messageId)}
           onForwardMessage={(messageId) => void forwardChatMessage(messageId)}
