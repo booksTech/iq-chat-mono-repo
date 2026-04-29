@@ -9,7 +9,7 @@ const envSchema = z.object({
   MONGODB_URI: z.string().min(1, 'MONGODB_URI is required'),
   JWT_SECRET: z.string().min(32, 'JWT_SECRET must be at least 32 characters'),
   JWT_EXPIRES_IN: z.string().default('7d'),
-  CLIENT_URL: z.string().url('CLIENT_URL must be a valid URL'),
+  CLIENT_URL: z.string().url('CLIENT_URL must be a valid URL').default('http://localhost:5173'),
   AUTH_PAYLOAD_SECRET: z.string().min(16, 'AUTH_PAYLOAD_SECRET must be at least 16 characters'),
   SMTP_HOST: z.string().optional(),
   SMTP_PORT: z.coerce.number().int().positive().optional(),
